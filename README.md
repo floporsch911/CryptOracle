@@ -33,9 +33,9 @@ Nous voulons également permettre à l'utilisateur de s'informer sur les tendanc
 ### Prérequis
 
 ```cd frontend
-npm install
-cd ..
-cd backend
+npm install```
+
+```cd backend
 npm install```
 
 ### Lancer le frontend
