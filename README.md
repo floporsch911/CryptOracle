@@ -27,3 +27,22 @@ Nous voulons également permettre à l'utilisateur de s'informer sur les tendanc
 
 - **Calcul gain/perte** : Service permettant de calculer les gains et pertes en fonction des tendances des cryptomonnaies.
 - **Reformulation IA** : Service permettant de reformuler les horoscopes pour les rendre plus adaptés à la cryptomonnaie. (Modèle ollama tournant en local, API REST).
+
+## Le lancer
+
+### Prérequis
+
+```cd frontend
+npm install
+cd ..
+cd backend
+npm install```
+
+### Lancer le frontend
+
+```cd frontend
+npm start```
+
+### Lancer le backend
+Depuis la racine du projet :
+```docker-compose up```
