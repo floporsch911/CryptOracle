@@ -32,17 +32,27 @@ Nous voulons également permettre à l'utilisateur de s'informer sur les tendanc
 
 ### Prérequis
 
-```cd frontend
-npm install```
+```bash
+cd frontend
+npm install
+```
 
-```cd backend
-npm install```
+```bash
+cd backend
+npm install
+```
 
 ### Lancer le frontend
 
-```cd frontend
-npm start```
+```bash
+cd frontend
+npm start
+```
 
 ### Lancer le backend
+
 Depuis la racine du projet :
-```docker-compose up```
+
+```bash
+docker-compose up
+```
