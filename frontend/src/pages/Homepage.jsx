@@ -9,7 +9,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const handleCreateAccountClick = () => {
-    navigate("/createAccount");
+    navigate("/chart");
   };
 
   return (
