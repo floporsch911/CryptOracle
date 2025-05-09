@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import HoroscopeFetcher from './HoroscopeFetcher';
+import HomePage from './Homepage';
+import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => (
   <div>
-    <h1>Welcome to Crypt'Oracle</h1>
-    <p>Frontend is running locally!</p>
-    <p>Accessible through Reverse Proxy</p>
-    <HoroscopeFetcher />
+    <HomePage />
   </div>
 );
 
