@@ -238,6 +238,100 @@ app.get('/crypto-news', async (req, res) => {
     }
 });
 
+app.get('/binance/data', async (req, res) => {
+    const { symbol, interval, startTime, endTime } = req.query;
+
+    if (!symbol || !interval) {
+        return res.status(400).json({ error: 'symbol and interval are required.' });
+    }
+
+    try {
+        const params = { symbol, interval };
+
+        if (startTime) params.startTime = startTime;
+        if (endTime) params.endTime = endTime;
+
+        const binanceUrl = 'https://api.binance.com/api/v3/klines';
+        const response = await axios.get(binanceUrl, { params });
+
+        // ✅ Transform into array of candle objects
+        const dataFiltered = response.data.map((item) => ({
+            time: item[0] / 1000,
+            open: parseFloat(item[1]),
+            high: parseFloat(item[2]),
+            low: parseFloat(item[3]),
+            close: parseFloat(item[4]),
+        }));
+
+        return res.json({ data: dataFiltered });
+
+    } catch (error) {
+        console.error('Binance API Error:', error.message);
+        return res.status(500).json({ error: 'Failed to fetch data from Binance.' });
+    }
+});
+
+app.get('/binance/crypto', async (req, res) => {
+
+    try {
+
+        const binanceUrl = 'https://api.binance.com/api/v3/exchangeInfo';
+        const response = await axios.get(binanceUrl);
+
+        const tradingPairs = response.data.symbols
+            .filter((s) => s.status === 'TRADING').map((s) => {
+
+                return { symbol: s.symbol, name: s.baseAsset }
+            });
+
+        return res.json({ data: tradingPairs });
+
+    } catch (error) {
+        console.error('Binance API Error:', error.message);
+        return res.status(500).json({ error: 'Failed to fetch data from Binance.' });
+    }
+});
+
+app.get('/calcul/gain/crypto', async (req, res) => {
+    const { symbol } = req.query;
+
+    if (!symbol) {
+        return res.status(400).json({ error: 'symbol and interval are required.' });
+    }
+
+    try {
+        const params = { symbol };
+
+        startTime = new Date();
+        startTime.setDate(startTime.getDate() - 2);
+        endTime = new Date();
+
+        params.startTime = startTime.getTime();
+        params.endTime = endTime.getTime();
+        params.interval = '1d';
+
+        const binanceUrl = 'https://api.binance.com/api/v3/klines';
+        const response = await axios.get(binanceUrl, { params });
+
+        const dataFiltered = response.data.map((item) => ({
+            time: item[0] / 1000,
+            open: parseFloat(item[1]),
+            high: parseFloat(item[2]),
+            low: parseFloat(item[3]),
+            close: parseFloat(item[4]),
+        })).sort((a, b) => a.time - b.time);
+
+        const gain = (((dataFiltered[dataFiltered.length - 1].close - dataFiltered[0].close) / dataFiltered[0].close) * 100).toFixed(2);
+        return res.json({ data: gain });
+
+    } catch (error) {
+        console.error('Binance API Error:', error.message);
+        return res.status(500).json({ error: 'Failed to fetch data from Binance.' });
+    }
+});
+
+
+
 app.listen(PORT, () => {
     console.log(`Backend server listening on port ${PORT}`);
 });
