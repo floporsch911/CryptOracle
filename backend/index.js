@@ -102,6 +102,7 @@ app.post('/horoscope', async (req, res) => {
             });
             horoscopeData = horoscopeResponse?.data?.data?.horoscope_data || horoscopeResponse?.data?.horoscope || '';
         } catch (e) {
+            console.error('Error fetching horoscope:', e.message || e);
             horoscopeData = '';
         }
 
@@ -118,6 +119,7 @@ app.post('/horoscope', async (req, res) => {
                 });
                 rephrasedHoroscope = ollamaResponse?.data?.response || ollamaResponse?.data?.result || '';
             } catch (e) {
+                console.error('Error reformulating horoscope with Ollama:', e.message || e);
                 rephrasedHoroscope = '';
             }
         }
@@ -243,6 +245,7 @@ app.get('/crypto-news', async (req, res) => {
             // Tolerant Reader: parser peut échouer ou le format peut varier
             feed = await parser.parseString(response?.data || '');
         } catch (e) {
+            console.error('Error parsing RSS feed:', e.message || e);
             feed = null;
         }
         if (!feed || !Array.isArray(feed.items)) {
@@ -260,6 +263,101 @@ app.get('/crypto-news', async (req, res) => {
         return negotiateResponse(req, res, { error: `Impossible de lire le flux RSS ${error.message}` }, "error", 500);
     }
 });
+
+app.get('/get/crypto/data', async (req, res) => {
+    const { symbol, interval, startTime, endTime } = req.query;
+
+    if (!symbol || !interval) {
+        return negotiateResponse(req, res, { error: 'symbol and interval are required.' }, "error", 400);
+    }
+
+    try {
+        const params = { symbol, interval };
+
+        if (startTime) params.startTime = startTime;
+        if (endTime) params.endTime = endTime;
+
+        const binanceUrl = 'https://api.binance.com/api/v3/klines';
+        const response = await axios.get(binanceUrl, { params });
+
+        // ✅ Transform into array of candle objects
+        const dataFiltered = response.data.map((item) => ({
+            time: item[0] / 1000,
+            open: parseFloat(item[1]),
+            high: parseFloat(item[2]),
+            low: parseFloat(item[3]),
+            close: parseFloat(item[4]),
+        }));
+
+        return negotiateResponse(req, res, { data: dataFiltered }, "cryptoData", 200);
+
+    } catch (error) {
+        console.error('Binance API Error:', error.message);
+        return negotiateResponse(req, res, { error: 'Failed to fetch data from Binance.' }, "error", 500);
+    }
+});
+
+app.get('/get/crypto/all', async (req, res) => {
+
+    try {
+
+        const binanceUrl = 'https://api.binance.com/api/v3/exchangeInfo';
+        const response = await axios.get(binanceUrl);
+
+        const tradingPairs = response.data.symbols
+            .filter((s) => s.status === 'TRADING').map((s) => {
+
+                return { symbol: s.symbol, name: s.baseAsset }
+            });
+
+        return negotiateResponse(req, res, { data: tradingPairs }, "tradingPairs", 200);
+
+    } catch (error) {
+        console.error('Binance API Error:', error.message);
+        return negotiateResponse(req, res, { error: 'Failed to fetch trading pairs from Binance.' }, "error", 500);
+    }
+});
+
+app.get('/calcul/gain/crypto', async (req, res) => {
+    const { symbol } = req.query;
+
+    if (!symbol) {
+        return negotiateResponse(req, res, { error: 'symbol is required.' }, "error", 400);
+    }
+
+    try {
+        const params = { symbol };
+
+        const startTime = new Date();
+        startTime.setDate(startTime.getDate() - 2);
+        const endTime = new Date();
+
+        params.startTime = startTime.getTime();
+        params.endTime = endTime.getTime();
+        params.interval = '1d';
+
+        const binanceUrl = 'https://api.binance.com/api/v3/klines';
+        const response = await axios.get(binanceUrl, { params });
+
+        const dataFiltered = response.data.map((item) => ({
+            time: item[0] / 1000,
+            open: parseFloat(item[1]),
+            high: parseFloat(item[2]),
+            low: parseFloat(item[3]),
+            close: parseFloat(item[4]),
+        })).sort((a, b) => a.time - b.time);
+
+        const gain = (((dataFiltered[dataFiltered.length - 1].close - dataFiltered[0].close) / dataFiltered[0].close) * 100).toFixed(2);
+        return negotiateResponse(req, res, { data: gain }, "gain", 200);
+
+    } catch (error) {
+        console.error('Binance API Error:', error.message);
+        return negotiateResponse(req, res, { error: 'Failed to fetch data from Binance.' }, "error", 500);
+    }
+});
+
+
+
 
 app.listen(PORT, () => {
     console.log(`Backend server listening on port ${PORT}`);

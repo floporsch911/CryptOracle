@@ -1,10 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
+:root {
+    --background-color: rgb(47, 45, 75);
+    --font-color-text: rgb(232, 232, 252);
+    --background-color-button: rgb(89, 94, 135)
+}
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: rgb(47, 45, 75) !important;
+    background-color: var(--background-color) !important;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -24,7 +30,7 @@ nav .orbitron {
 
 .orbitron {
     font-family: 'Orbitron', sans-serif;
-    color: rgb(232, 232, 252) !important;
+    color: var(--font-color-text) !important;
     font-weight: 500;
 }
 
@@ -115,11 +121,10 @@ nav>.container {
 .intro-sentence {
     font-size: 1.3rem;
     padding: 0.5rem;
-    padding: 0.5rem;
 }
 
-.btn-style {
-    background-color: rgb(89, 94, 135);
+.btn-create-account {
+    background-color: var(--background-color-button);
     color: rgb(255, 255, 255);
     font-weight: 500;
     font-size: 1.2rem;
@@ -236,7 +241,7 @@ nav>.container {
     font-size: 1rem;
     text-align: justify;
     padding: 10px;
-    padding-top:20px;
+    padding-top: 20px;
 }
 
 /* Appliquer à toute la page */
@@ -247,7 +252,7 @@ nav>.container {
 ::-webkit-scrollbar-thumb {
     background: rgba(89, 94, 135, 0);
     border-radius: 6px;
-    transition: background 0.5s ease;  
+    transition: background 0.5s ease;
 
 }
 

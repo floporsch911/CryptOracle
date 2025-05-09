@@ -1,0 +1,23 @@
+.calculGainCrypto-input {
+    background-color: var(--background-color-button);
+    color: white;
+
+    border: none;
+    width: 100px;
+}
+
+.calculGainCrypto-input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}

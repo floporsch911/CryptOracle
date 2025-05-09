@@ -1,0 +1,89 @@
+.timeframe-container {
+    overflow-x: auto;
+    overflow-y: hidden;
+    border: solid 1px black;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    width: 30%;
+    height: 30px;
+    display: block;
+    white-space: nowrap;
+    scrollbar-width: none;
+}
+
+.timeframe-container::-webkit-scrollbar {
+    display: none;
+}
+
+.scroll-inner {
+    display: flex;
+    height: 100%;
+    animation: nudge-scroll 1.2s ease-out 0.2s 1 both;
+}
+
+@keyframes nudge-scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    30%,
+    60% {
+        transform: translateX(-45%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+
+.timeframe-button {
+    position: relative;
+    padding: 2px 8px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-shadow: none;
+    outline: none;
+    border: none;
+    background-color: var(--background-color-button);
+    color: var(--font-color-text);
+    /* gray-700 */
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.timeframe-button:first-child {
+    border-left: none;
+}
+
+.timeframe-button:not(:first-child)::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 15%;
+    height: 70%;
+    width: 1px;
+    opacity: .4;
+    background-color: black;
+}
+
+.timeframe-button:hover {
+    background-color: var(--backgroun-color);
+    /* gray-100 */
+}
+
+.timeframe-button.active {
+    background-color: var(--backgroun-color);
+    /* blue-600 */
+    color: var(--font-color-text);
+}
+
+.timeframe-button.active::before,
+.timeframe-button.active+.timeframe-button::before {
+    display: none;
+}
+
+.timeframe-container::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Edge */
+}
