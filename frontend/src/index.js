@@ -1,14 +1,18 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
-import HoroscopeFetcher from './HoroscopeFetcher';
-import HomePage from './Homepage';
+import HomePage from './pages/Homepage';
+import CreatePage from './pages/CreatePage';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => (
-  <div>
-    <HomePage />
-  </div>
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/createAccount" element={<CreatePage />} />
+    </Routes>
+  </BrowserRouter>
 );
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
