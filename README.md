@@ -56,3 +56,11 @@ Depuis la racine du projet :
 ```bash
 docker-compose up
 ```
+### Lancer Ollama
+
+Télécharger l'application Ollama
+
+Télécharger le modèle : 
+```bash
+ollama pull mistral:7b
+```
