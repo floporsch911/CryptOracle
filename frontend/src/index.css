@@ -110,6 +110,7 @@ nav>.container {
 .intro-sentence {
     font-size: 1.3rem;
     padding: 0.5rem;
+    padding: 0.5rem;
 }
 
 .btn-style {
@@ -180,4 +181,40 @@ nav>.container {
     font-size: 1rem;
     text-align: justify;
     padding: 10px;
+}
+
+
+.news {
+    width: 50%;
+    height: 20rem;
+    padding: 1em;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.title {
+    font-size: 3rem;
+    font-weight: 500;
+    color: rgb(232, 232, 252);
+}
+
+/* Appliquer à toute la page */
+::-webkit-scrollbar {
+    width: 8px;
+
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(47, 45, 75);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(47, 45, 75);
+    border-radius: 6px;
+    transition: background 0.5s ease;  
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(198, 199, 242);
 }
