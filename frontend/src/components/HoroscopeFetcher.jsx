@@ -1,44 +1,78 @@
 // frontend/src/components/HoroscopeFetcher.js
-import { useState } from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import axios from "axios";
+import { useEffect } from "react";
 
 function HoroscopeFetcher() {
-    const [date, setDate] = useState('');
-    const [result, setResult] = useState('');
-    const [loading, setLoading] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [birthDate, setBirthDate] = useState(user ? user.birthDate : "");
+  const [sign, setSign] = useState(
+    JSON.parse(localStorage.getItem("sign")) || ""
+  );
+  const [horoscope, setHoroscope] = useState(
+    JSON.parse(localStorage.getItem("horoscope")) || ""
+  );
+  const [loading, setLoading] = useState(false);
+  const horoscopeIcons = {
+    Aries: "🐏",
+    Taurus: "🐂",
+    Gemini: "👫",
+    Cancer: "🦀",
+    Leo: "🦁",
+    Virgo: "👩‍🌾",
+    Libra: "⚖️",
+    Scorpio: "🦂",
+    Sagittarius: "🏹",
+    Capricorn: "🐐",
+    Aquarius: "🏺",
+    Pisces: "🐟",
+  };
 
-    const fetchHoroscope = async () => {
-        setLoading(true);
-        setResult('');
+  useEffect(() => {
+    if (!localStorage.getItem("horoscope") && birthDate) {
+      fetchHoroscope();
+    }
+  }, []);
 
-        try {
-            const response = await axios.post('/api/horoscope', {
-                date: date
-            });
-            setResult(response.data.horoscope);
-        } catch (error) {
-            setResult('Error fetching horoscope.');
-            console.error(error);
-        } finally {
-            setLoading(false);
-        }
-    };
+  const fetchHoroscope = async () => {
+    setLoading(true);
+    setHoroscope("");
 
-    return (
-        <div>
-            <h2>Get Your Crypto Horoscope</h2>
-            <input
-                type="text"
-                placeholder="Enter your birth date (DD/MM)"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-            />
-            <button onClick={fetchHoroscope}>Fetch Horoscope</button>
+    try {
+      const response = await axios.post("/api/horoscope", {
+        date: birthDate,
+      });
+      setHoroscope(response.data.horoscope);
+      setSign(response.data.sign);
+      localStorage.setItem(
+        "horoscope",
+        JSON.stringify(response.data.horoscope)
+      );
+      localStorage.setItem("sign", JSON.stringify(response.data.sign));
+    } catch (error) {
+      setHoroscope("Error fetching horoscope.");
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-            {loading && <p>Loading...</p>}
-            {result && <div><h3>Result:</h3><p>{result}</p></div>}
+  return (
+    <div className="main-element horoscope-fetcher">
+      <div className="orbitron horoscope-title">Crypto Horoscope of the day</div>
+      {loading && <p>Loading...</p>}
+      {sign && (
+        <div className="horoscope-sign nunito-body">
+          {horoscopeIcons[sign]} {sign}
         </div>
-    );
+      )}
+      {horoscope && (
+        <div className="horoscope-content nunito-body">
+          <p>{horoscope}</p>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default HoroscopeFetcher;

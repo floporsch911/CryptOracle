@@ -4,7 +4,7 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: rgb(47, 45, 75)!important;
+    background-color: rgb(47, 45, 75) !important;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -28,12 +28,12 @@ nav .orbitron {
     font-weight: 500;
 }
 
-.nunito-body{
+.nunito-body {
     font-family: "Nunito", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-  }
+}
 
 nav>.container {
     margin-left: 0.5rem;
@@ -45,6 +45,9 @@ nav>.container {
 
 .main-container {
     color: #ffffff;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
 .header-navbar {
@@ -55,11 +58,11 @@ nav>.container {
     content: '';
     position: absolute;
     bottom: 0;
-    left: 10%; /* Centers the line horizontally */
-    width: 80%; /* Line takes 80% of the width */
-    height: 2px; /* Thickness of the line */
-    background-color: rgb(232, 232, 252); /* Line color */
-    border-radius: 2px; /* Rounded edges */
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background-color: rgb(232, 232, 252);
+    border-radius: 2px;
 }
 
 .logo {
@@ -74,7 +77,7 @@ nav>.container {
     z-index: 5;
 }
 
-.btn-user { 
+.btn-user {
     z-index: 3;
     font-size: 0.8rem !important;
     border-radius: 0px !important;
@@ -97,7 +100,7 @@ nav>.container {
 
 .footer-button {
     cursor: pointer;
-    transition : color 0.3s ease;
+    transition: color 0.3s ease;
 }
 
 .footer-button:hover {
@@ -106,7 +109,7 @@ nav>.container {
 
 .intro-sentence {
     font-size: 1.3rem;
-    padding : 0.5rem;
+    padding: 0.5rem;
 }
 
 .btn-style {
@@ -135,5 +138,46 @@ nav>.container {
     font-size: 0.8rem;
     color: rgb(198, 199, 242);
     font-style: italic;
-    padding : 0.5rem ;
-}   
+    padding: 0.5rem;
+}
+
+.main-element {
+    background-color: rgb(89, 94, 135);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 10px;
+    min-width: 300px;
+}
+
+.horoscope-fetcher {
+    width: 40%;
+}
+
+.horoscope-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    color: rgb(232, 232, 252);
+}
+
+.horoscope-sign {
+    font-size: 1rem;
+    text-align: center;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(198, 199, 242);
+    width: fit-content;
+    margin: 5px auto;
+    border-radius: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.horoscope-content {
+    font-size: 1rem;
+    text-align: justify;
+    padding: 10px;
+}

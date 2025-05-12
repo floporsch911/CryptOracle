@@ -57,17 +57,19 @@ function getZodiacSign(day, month) {
 app.post('/horoscope', async (req, res) => {
     const { date } = req.body;
     if (!date) {
-        return res.status(400).json({ error: "Date is required in DD/MM format." });
+        return res.status(400).json({ error: "The date is required." });
     }
 
     try {
-        const [dayStr, monthStr] = date.split('/');
-        const day = parseInt(dayStr, 10);
+        const [yearStr, monthStr, dayStr] = date.split('-');
+        if (yearStr.length !== 4 || monthStr.length !== 2 || dayStr.length !== 2) {
+            return res.status(400).json({ error: "Invalid date format. Use YYYY-MM-DD." });
+        }
         const month = parseInt(monthStr, 10);
+        const day = parseInt(dayStr, 10);
 
         const sign = getZodiacSign(day, month);
         const formattedSign = sign.toLowerCase().replace(/\s+/g, '-');
-
 
         // Step 1: Fetch the horoscope
         const horoscopeResponse = await axios.get(HOROSCOPE_API_URL, {
@@ -81,7 +83,7 @@ app.post('/horoscope', async (req, res) => {
         console.log("Horoscope Data: ", horoscopeData);
 
         // Step 2: Reformulate through Ollama
-        const promptIntro = "Transform the following horoscope into creative investment advice for the world of cryptocurrency. Keep the spirit of the horoscope but reinterpret it to offer light, imaginative tips on crypto trading or investing.";
+        const promptIntro = "Transform the following horoscope into creative investment advice for the world of cryptocurrency. Keep the spirit of the horoscope but express it in no more than 4 or 5 imaginative, engaging sentences. Make it light, playful, and insightful—like a quick cosmic tip for a crypto trader.";
         const fullPrompt = `${promptIntro}\n${horoscopeData}`;
 
         const ollamaResponse = await axios.post(OLLAMA_API_URL, {
@@ -92,7 +94,7 @@ app.post('/horoscope', async (req, res) => {
 
         const rephrasedHoroscope = ollamaResponse.data.response;
 
-        return res.json({ horoscope: rephrasedHoroscope });
+        return res.json({ sign: sign, horoscope: rephrasedHoroscope });
 
     } catch (error) {
         console.error('Backend Error:', error.response?.data || error.message);
