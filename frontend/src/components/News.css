@@ -1,0 +1,19 @@
+.news-link {
+    text-decoration: none;
+    transition: color 0.2s ease;
+    color: rgb(198, 199, 242);
+}
+.news-link:hover {
+    text-decoration: none;
+    color: rgb(89, 94, 135);
+}
+
+.news-title {
+    font-size: 1rem;
+    font-weight: 500;
+    font-weight: bold;
+}
+
+li {
+    margin-bottom: 1.5rem;
+}

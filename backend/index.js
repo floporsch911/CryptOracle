@@ -1,8 +1,14 @@
 // backend/index.js
 const express = require('express');
 const axios = require('axios');
+const Parser = require('rss-parser');
 const cors = require('cors'); 
 const bodyParser = require('body-parser');
+const parser = new Parser({
+  customFields: {
+    item: ['media:content', 'dc:creator']
+  }
+});
 
 const app = express();
 const PORT = 4000;
@@ -10,6 +16,7 @@ const PORT = 4000;
 // API URLs - going through Nginx
 const HOROSCOPE_API_URL = 'http://nginx-proxy/horoscope/api/v1/get-horoscope/daily';
 const OLLAMA_API_URL = 'http://nginx-proxy/ollama/api/generate';
+const CRYPTO_NEWS_API_URL = 'http://nginx-proxy/crypto-news';
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -85,6 +92,25 @@ app.post('/horoscope', async (req, res) => {
     } catch (error) {
         console.error('Backend Error:', error.response?.data || error.message);
         return res.status(500).json({ error: 'Failed to generate horoscope.' });
+    }
+});
+
+app.get('/crypto-news', async (req, res) => {
+    try {
+        const feed = await parser.parseURL('https://cointelegraph.com/rss');
+        if (!feed || !feed.items) {
+            return res.status(500).json({ error: "Impossible de lire le flux RSS 1" });
+        }
+        const news = feed.items.slice(0, 5).map(item => ({
+            title: item.title,
+            link: item.link,
+            summary: item.contentSnippet,
+            date: item.pubDate
+        }));
+        res.json(news);
+    } catch (error) {
+        console.error("RSS error:", error.message);
+        res.status(500).json({ error: "Impossible de lire le flux RSS ${error.message}" });
     }
 });
 

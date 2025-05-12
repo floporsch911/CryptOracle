@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import HomePage from './pages/Homepage';
 import CreatePage from './pages/CreatePage';
+import MainPage from './pages/MainPage'; 
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -11,6 +12,7 @@ const App = () => (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/createAccount" element={<CreatePage />} />
+      <Route path="/main" element={<MainPage />} />
     </Routes>
   </BrowserRouter>
 );
