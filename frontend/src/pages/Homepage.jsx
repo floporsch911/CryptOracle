@@ -32,7 +32,7 @@ const HomePage = () => {
         </div>
         <div className="d-flex justify-content-center mt-4">
           <button
-            className="btn-create-account"
+            className="btn-style btn-create-account"
             onMouseEnter={(e) =>
               (e.target.textContent = "Create an account to lose millions")
             }

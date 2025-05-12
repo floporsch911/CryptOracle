@@ -1,11 +1,13 @@
 // backend/index.js
 const express = require('express');
 const axios = require('axios');
-const cors = require('cors'); 
+const cors = require('cors');
 const bodyParser = require('body-parser');
+const nano = require('nano')('http://admin:password@couchdb:5984');
 
 const app = express();
 const PORT = 4000;
+const DB_NAME = 'users';
 
 // API URLs - going through Nginx
 const HOROSCOPE_API_URL = 'http://nginx-proxy/horoscope/api/v1/get-horoscope/daily';
@@ -13,6 +15,16 @@ const OLLAMA_API_URL = 'http://nginx-proxy/ollama/api/generate';
 
 app.use(cors());
 app.use(bodyParser.json());
+
+// Ensure DB exists
+(async () => {
+    const dbList = await nano.db.list();
+    if (!dbList.includes(DB_NAME)) {
+        await nano.db.create(DB_NAME);
+    }
+})();
+
+const usersDb = nano.db.use(DB_NAME);
 
 function getZodiacSign(day, month) {
     const zodiacSigns = [
@@ -85,6 +97,70 @@ app.post('/horoscope', async (req, res) => {
     } catch (error) {
         console.error('Backend Error:', error.response?.data || error.message);
         return res.status(500).json({ error: 'Failed to generate horoscope.' });
+    }
+});
+
+// Route to create a user
+app.post('/users', async (req, res) => {
+    const { username, password, birthDate, color } = req.body;
+
+    if (!username || !password || !birthDate || !color) {
+        return res.status(400).json({ message: 'Missing required fields' });
+    }
+
+    try {
+        const userDoc = {
+            username,
+            password,  // You should hash this in production
+            birthDate,
+            color,
+            createdAt: new Date().toISOString(),
+        };
+
+        const response = await usersDb.insert(userDoc);
+        res.status(201).json({ message: 'User created', id: response.id });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to create user' });
+    }
+});
+
+// Route to authenticate a user
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Missing username or password' });
+    }
+
+    try {
+        const result = await usersDb.find({
+            selector: { username }
+        });
+
+        const user = result.docs[0];
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // In production, you'd hash and compare passwords securely
+        if (user.password !== password) {
+            return res.status(401).json({ message: 'Incorrect password' });
+        }
+
+        return res.status(200).json({
+            message: 'Login successful',
+            user: {
+                username: user.username,
+                birthDate: user.birthDate,
+                color: user.color
+            }
+        });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Login failed' });
     }
 });
 
