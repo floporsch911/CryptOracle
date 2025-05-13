@@ -14,7 +14,9 @@ function CryptoNews() {
     setLoading(true);
     try {
       const res = await fetch('/api/crypto-news');
-      if (!res.ok) throw new Error("Failed to load crypto news...");
+      if (!res.ok) {
+        setError("Failed to load crypto news...");
+      }
       const data = await res.json();
       setNews(data);
     } catch (err) {
@@ -34,6 +36,11 @@ function CryptoNews() {
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
+        </div>
+      )}
+      {error && (
+        <div className="error-message">
+          <p>{error}</p>
         </div>
       )}
       <ul style={{ listStyle: 'none', padding: 0 }}>

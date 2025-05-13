@@ -59,7 +59,6 @@ function getZodiacSign(day, month) {
 }
 
 app.post('/horoscope', async (req, res) => {
-    console.log("Received request to /horoscope");
     const { date } = req.body;
     if (!date) {
         return res.status(400).json({ error: "The date is required." });
@@ -85,7 +84,6 @@ app.post('/horoscope', async (req, res) => {
         });
 
         const horoscopeData = horoscopeResponse.data.data.horoscope_data;
-        console.log("Horoscope Data: ", horoscopeData);
 
         // Step 2: Reformulate through Ollama
         const promptIntro = "Transform the following horoscope into creative investment advice for the world of cryptocurrency. Keep the spirit of the horoscope but express it in no more than 4 or 5 imaginative, engaging sentences. Make it light, playful, and insightful—like a quick cosmic tip for a crypto trader.";
@@ -187,9 +185,19 @@ app.post('/login', async (req, res) => {
 
 app.get('/crypto-news', async (req, res) => {
     try {
-        const feed = await parser.parseURL('https://cointelegraph.com/rss');
+
+        const response = await axios.get(CRYPTO_NEWS_API_URL, {
+            headers: {
+                'Accept': 'application/rss+xml, application/xml;q=0.9, */*;q=0.8',
+                'User-Agent': 'Mozilla/5.0 (Node.js server)' // Some servers require a valid UA
+            },
+            responseType: 'text'
+        });
+        res.set('Content-Type', 'application/rss+xml');
+        // Parse the RSS XML from response.data
+        const feed = await parser.parseString(response.data);
         if (!feed || !feed.items) {
-            return res.status(500).json({ error: "Impossible de lire le flux RSS 1" });
+            return res.status(500).json({ error: "Impossible de lire le flux RSS." });
         }
         const news = feed.items.slice(0, 5).map(item => ({
             title: item.title,
