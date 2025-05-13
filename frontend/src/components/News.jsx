@@ -11,7 +11,7 @@ function NewsItem({ title, summary, date, link, maxLength = 100 }) {
         <strong className='news-title'>{title}</strong>
       </a>
       <p style={{ margin: '0.5em 0', fontSize: '0.9em' }}>{truncatedSummary}</p>
-      <small style={{ color: '#666' }}>{new Date(date).toLocaleString()}</small>
+      <small className='news-date'>{new Date(date).toLocaleString()}</small>
     </li>
   );
 }

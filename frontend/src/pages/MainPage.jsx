@@ -9,7 +9,7 @@ const MainPage = () => {
     return (
         <div className="app-container text-light">
             <Header />
-            <Main className="flex-grow-1 py-4">
+            <Main className="main-page-container flex-grow-1 py-4">
                 <HoroscopeFetcher />
                 <CryptoNews />
             </Main>

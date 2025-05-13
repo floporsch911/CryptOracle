@@ -45,6 +45,10 @@ nav>.container {
 
 .main-container {
     color: #ffffff;
+
+}
+
+.main-page-container {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -155,11 +159,29 @@ nav>.container {
     width: 40%;
 }
 
-.horoscope-title {
+.title {
     font-size: 1.5rem;
     font-weight: 700;
     text-align: center;
     color: rgb(232, 232, 252);
+}
+
+.news {
+    width: 40%;
+    height: 20rem;
+    padding: 1em;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.sticky-title {
+    position: sticky;
+    top: 0;
+    background: rgb(89, 94, 135);
+    z-index: 1;
+    padding-top: 1em;
+    padding-bottom: 0.5em;
+    border-bottom: solid 1px rgb(198, 199, 242);
 }
 
 .horoscope-sign {
@@ -183,33 +205,13 @@ nav>.container {
     padding: 10px;
 }
 
-
-.news {
-    width: 50%;
-    height: 20rem;
-    padding: 1em;
-    overflow-y: auto;
-    box-sizing: border-box;
-}
-
-.title {
-    font-size: 3rem;
-    font-weight: 500;
-    color: rgb(232, 232, 252);
-}
-
 /* Appliquer à toute la page */
 ::-webkit-scrollbar {
     width: 8px;
-
-}
-
-::-webkit-scrollbar-track {
-    background: rgb(47, 45, 75);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgb(47, 45, 75);
+    background: rgba(89, 94, 135, 0);
     border-radius: 6px;
     transition: background 0.5s ease;  
 

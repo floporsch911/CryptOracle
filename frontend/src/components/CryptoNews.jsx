@@ -18,8 +18,8 @@ function CryptoNews() {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
-    <div className="news">
-      <h2 className='title nunito-body'>Actualités Crypto</h2>
+    <div className="main-element news" style={{ paddingTop: '0px' }}>
+      <h2 className='title sticky-title orbitron'>Crypto Actuality</h2>
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {news.map((item, index) => (
           <News
