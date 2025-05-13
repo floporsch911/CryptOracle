@@ -5,11 +5,8 @@ const Parser = require('rss-parser');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const nano = require('nano')('http://admin:password@couchdb:5984');
-const parser = new Parser({
-  customFields: {
-    item: ['media:content', 'dc:creator']
-  }
-});
+const parser = new Parser();
+const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = 4000;
@@ -62,6 +59,7 @@ function getZodiacSign(day, month) {
 }
 
 app.post('/horoscope', async (req, res) => {
+    console.log("Received request to /horoscope");
     const { date } = req.body;
     if (!date) {
         return res.status(400).json({ error: "The date is required." });
@@ -118,9 +116,21 @@ app.post('/users', async (req, res) => {
     }
 
     try {
+        // Check if a user with the same username already exists
+        const existingUser = await usersDb.find({
+            selector: { username }
+        });
+
+        if (existingUser.docs.length > 0) {
+            return res.status(409).json({ message: 'Username already exists' });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const userDoc = {
             username,
-            password,  // You should hash this in production
+            password: hashedPassword, // Store the hashed password
             birthDate,
             color,
             createdAt: new Date().toISOString(),
@@ -153,8 +163,10 @@ app.post('/login', async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // In production, you'd hash and compare passwords securely
-        if (user.password !== password) {
+        // Compare the provided password with the hashed password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
             return res.status(401).json({ message: 'Incorrect password' });
         }
 

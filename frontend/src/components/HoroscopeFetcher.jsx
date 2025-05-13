@@ -60,7 +60,13 @@ function HoroscopeFetcher() {
   return (
     <div className="main-element horoscope-fetcher">
       <div className="orbitron title">Crypto Horoscope of the day</div>
-      {loading && <p>Loading...</p>}
+      {loading && (
+        <div className="loading-container">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      )}
       {sign && (
         <div className="horoscope-sign nunito-body">
           {horoscopeIcons[sign]} {sign}

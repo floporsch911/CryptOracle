@@ -52,6 +52,7 @@ nav>.container {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    justify-content: center;
 }
 
 .header-navbar {
@@ -156,7 +157,9 @@ nav>.container {
 }
 
 .horoscope-fetcher {
-    width: 40%;
+    flex: 1 1 40%;
+    max-width: 50%;
+    box-sizing: border-box;
 }
 
 .title {
@@ -166,12 +169,14 @@ nav>.container {
     color: rgb(232, 232, 252);
 }
 
-.news {
-    width: 40%;
+.crypto-news {
+    flex: 1 1 50%;
+    max-width: 60%;
     height: 20rem;
     padding: 1em;
     overflow-y: auto;
     box-sizing: border-box;
+    border-bottom: solid 10px rgb(89, 94, 135);
 }
 
 .sticky-title {
@@ -203,6 +208,7 @@ nav>.container {
     font-size: 1rem;
     text-align: justify;
     padding: 10px;
+    padding-top:20px;
 }
 
 /* Appliquer à toute la page */
@@ -219,4 +225,21 @@ nav>.container {
 
 ::-webkit-scrollbar-thumb:hover {
     background: rgb(198, 199, 242);
+}
+
+.loading-container {
+    padding: 1em;
+}
+
+.loading-container .spinner-border {
+    height: 40px;
+    width: 40px;
+    color: rgb(47, 45, 75);
+    margin: auto;
+    display: block;
+}
+
+.error-container {
+    background-color: rgb(89, 94, 135) !important;
+    color: rgb(248, 99, 99) !important;
 }

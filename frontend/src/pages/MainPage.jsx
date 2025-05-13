@@ -9,13 +9,15 @@ const MainPage = () => {
     return (
         <div className="app-container text-light">
             <Header />
-            <Main className="main-page-container flex-grow-1 py-4">
-                <HoroscopeFetcher />
-                <CryptoNews />
-            </Main>
+            <Main className="flex-grow-1 py-4">
+                <div className="main-page-container">
+                    <HoroscopeFetcher />
+                    <CryptoNews />
+                </div>
+            </Main >
             <Footer />
 
-        </div>
+        </div >
     );
 };
 

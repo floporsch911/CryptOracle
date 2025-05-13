@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Form, Container, Row, Col } from "react-bootstrap";
+import { Form, Container, Row, Col, Toast, ToastContainer } from "react-bootstrap";
+
 import Header from "../components/Header";
 import Main from "../components/Main";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
+import { ExclamationTriangleFill } from "react-bootstrap-icons";
 
 const CreateAccountPage = () => {
   const navigate = useNavigate();
@@ -13,6 +15,8 @@ const CreateAccountPage = () => {
     birthDate: "",
     color: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showToast, setShowToast] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,17 +36,21 @@ const CreateAccountPage = () => {
       });
 
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(formData.username));
+        localStorage.setItem("user", JSON.stringify(formData));
         // Redirect to the main page
         navigate("/main");
 
       } else {
         const errorData = await response.json();
-        alert(`Error: ${errorData.message}`);
+        setErrorMessage(errorData.message);
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 5000);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("An error occurred while creating the account.");
+      setErrorMessage("An error occurred while creating the account.")
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 5000);
     }
   };
 
@@ -131,6 +139,20 @@ const CreateAccountPage = () => {
         </Container>
       </Main>
       <Footer />
+      <ToastContainer position="top-center" className="p-3">
+        <Toast
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          delay={5000}
+          autohide
+          className="error-container"
+        >
+          <Toast.Body className="nunito-body">
+            <ExclamationTriangleFill className="me-2" />
+            {errorMessage}
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 };
