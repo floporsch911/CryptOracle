@@ -17,7 +17,7 @@ const Header = () => {
       navigate("/main");
     } else {
       // If user is not logged in, navigate to the home page
-    navigate("/");
+      navigate("/");
     }
   };
 
@@ -37,9 +37,16 @@ const Header = () => {
     navigate("/login"); // Navigate to the login page
   };
 
+  const handleProfil = () => {
+    navigate("/profil"); // Navigate to the profile page
+  };
+
   return (
     <Navbar expand="lg" className="header-navbar">
-      <Container  fluid className="d-flex justify-content-between align-items-center">
+      <Container
+        fluid
+        className="d-flex justify-content-between align-items-center"
+      >
         <Navbar.Brand className="d-flex align-items-center gap-2">
           <img
             src="/assets/icon.png"
@@ -50,7 +57,8 @@ const Header = () => {
           />
           <span className="orbitron">Crypt'Oracle</span>
         </Navbar.Brand>
-        <div className="ms-auto d-flex position-relative user-buttons"
+        <div
+          className="ms-auto d-flex position-relative user-buttons"
           style={{ marginRight: "3%" }}
           onMouseEnter={() => setShowButtons(true)} // Show buttons on hover
           onMouseLeave={() => setShowButtons(false)} // Hide buttons on hover leave
@@ -60,9 +68,7 @@ const Header = () => {
           </div>
 
           {showButtons && (
-            <ButtonGroup
-              className="d-flex flex-column position-absolute btn-user-group"
-            >
+            <ButtonGroup className="d-flex flex-column position-absolute btn-user-group">
               {!user ? (
                 <>
                   <button
@@ -76,13 +82,14 @@ const Header = () => {
                   </button>
                 </>
               ) : (
-                <button
-                  className="btn-style btn-user"
-                  variant="light"
-                  onClick={handleLogOut}
-                >
-                  Log Out
-                </button>
+                <>
+                  <button className="btn-style btn-user" onClick={handleProfil}>
+                    Profil
+                  </button>
+                  <button className="btn-style btn-user" onClick={handleLogOut}>
+                    Log Out
+                  </button>
+                </>
               )}
             </ButtonGroup>
           )}
