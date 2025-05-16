@@ -5,7 +5,7 @@ import IntervalBouton from "./Widget/intervalBouton"
 import SelectCrypto from './Widget/selectCrypto';
 import "./financialChart.css"
 
-export default function FinancialChart({ selectedSymbol, SetselectedSymbol }) {
+export default function FinancialChart({ selectedSymbol, setselectedSymbol }) {
   const chartContainerRef = useRef();
   const chartRef = useRef();
   const seriesRef = useRef();
@@ -171,9 +171,16 @@ export default function FinancialChart({ selectedSymbol, SetselectedSymbol }) {
   return (
     <div>
 
-      <div style={{ display: "inline-flex", width: "100%", height: "30px", justifyContent: "space-between" }}>
+      <div style={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        alignItems: "center", // aligne les éléments verticalement
+        gap: "8px",           // petit espacement si jamais il y a wrap
+        overflow: "hidden"
+      }}>
         <IntervalBouton interval={interval} setInterval={setInterval} />
-        <SelectCrypto selectedSymbol={selectedSymbol} setSelectedSymbol={SetselectedSymbol} />
+        <SelectCrypto selectedSymbol={selectedSymbol} setSelectedSymbol={setselectedSymbol} />
       </div>
       <div ref={chartContainerRef} style={{ width: '100%', height: 'auto' }} />
       <div style={{ marginTop: '8px', display: 'flex', justifyContent: 'start' }}>

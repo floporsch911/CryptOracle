@@ -20,7 +20,11 @@ export default function SelectCrypto({ selectedSymbol, setSelectedSymbol }) {
 
     const handleChange = (e) => {
         const selectedSymbolObj = symbols.find(s => s.symbol === e.target.value);
-        setSelectedSymbol(selectedSymbolObj);
+        if (typeof setSelectedSymbol === 'function') {
+            setSelectedSymbol(selectedSymbolObj);
+        } else {
+            console.error("❌ setSelectedSymbol is not a function", setSelectedSymbol);
+        }
     };
 
     return (

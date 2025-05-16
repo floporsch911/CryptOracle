@@ -1,14 +1,14 @@
-.calculGainCrypto-container {
-    display: flex;
-    flex-direction: column;
-}
-
 .calculGainCrypto-input {
     background-color: var(--background-color-button);
-    border-radius: 20px;
     color: white;
-    text-align: center;
+
     border: none;
+    width: 100px;
+}
+
+.calculGainCrypto-input:focus {
+    outline: none;
+    box-shadow: none;
 }
 
 input[type=number]::-webkit-inner-spin-button,
