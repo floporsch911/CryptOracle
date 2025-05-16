@@ -11,18 +11,32 @@ const AboutUsPage = () => {
       <Main className="flex-grow-1 py-4">
         <Container>
           <h2 className="text-center mb-4 orbitron">About Us</h2>
-          <p className="text-center nunito-body">
-            Welcome to Crypt'Oracle, your AI-based fortune teller! We are a team
-            of passionate developers and data scientists dedicated to providing
-            you with the most accurate predictions in the world of
-            cryptocurrency. Our mission is to empower you with the knowledge and
-            insights needed to make informed decisions in this ever-evolving
-            market.
+          <div className="main-element">
+          <p className="text-justify nunito-body">
+            Welcome to Crypt'Oracle, a service that combines tracking cryptocurrency trends with a parody of the unpredictability of the markets. Our project aims to create a platform where you can explore cryptocurrency trends, stay updated on related news, and receive personalized predictions based on your own data.
+            By playing on the illusion of prediction, we highlight the unpredictable nature of the markets. Our mission is to inform users about cryptocurrency trends while improving transparency regarding actual gains and losses based on these trends. This helps raise awareness about the risks of investing in cryptocurrencies and their inherent unpredictability.
           </p>
-          <p className="text-center nunito-body">
-            Join us on this exciting journey and let us help you navigate the
-            world of crypto with confidence!
-          </p>
+          </div>
+          <div className="text-center mt-4">
+            <img
+              src="/assets/flo1.png"
+              alt="About Us Illustration"
+              className="img-fluid"
+              style={{ maxWidth: "20%", height: "auto" }}
+            />
+            <img
+              src="/assets/luna.png"
+              alt="About Us Illustration"
+              className="img-fluid"
+              style={{ maxWidth: "20.2%", height: "auto" }}
+            />
+            <img
+              src="/assets/flo2.png"
+              alt="About Us Illustration"
+              className="img-fluid"
+              style={{ maxWidth: "20%", height: "auto" }}
+            />
+          </div>
         </Container>
       </Main>
       <Footer />

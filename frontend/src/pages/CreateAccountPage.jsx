@@ -24,7 +24,7 @@ const CreateAccountPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setFormData({...formData, context: "createAccount"});
     try {
       const response = await fetch("/api/users", {
         method: "POST",

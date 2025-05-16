@@ -107,38 +107,64 @@ app.post('/horoscope', async (req, res) => {
 
 // Route to create a user
 app.post('/users', async (req, res) => {
-    const { username, password, birthDate, color } = req.body;
-
-    if (!username || !password || !birthDate || !color) {
+    const { context, username, password, birthDate, color } = req.body;
+    if (!context || !username || !birthDate || !color) {
         return res.status(400).json({ message: 'Missing required fields' });
     }
 
     try {
-        // Check if a user with the same username already exists
-        const existingUser = await usersDb.find({
-            selector: { username }
-        });
+        if (context === 'createAccount') {
+            // Check if the password is defined 
+            if (!password) {
+                return res.status(400).json({ message: 'Password is required' });
+            }
+            // Check if a user with the same username already exists
+            const existingUser = await usersDb.find({
+                selector: { username }
+            });
 
-        if (existingUser.docs.length > 0) {
-            return res.status(409).json({ message: 'Username already exists' });
+            if (existingUser.docs.length > 0) {
+                return res.status(409).json({ message: 'Username already exists' });
+            }
+
+            // Hash the password
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            const userDoc = {
+                username,
+                password: hashedPassword, // Store the hashed password
+                birthDate,
+                color,
+                createdAt: new Date().toISOString(),
+            };
+
+            const response = await usersDb.insert(userDoc);
+            return res.status(201).json({ message: 'User created', id: response.id });
+        } else if (context === 'modifyAccount') {
+            // Find the existing user document
+            const existingUser = await usersDb.find({
+                selector: { username }
+            });
+
+            if (existingUser.docs.length === 0) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            const userDoc = existingUser.docs[0];
+
+            // Update the user document
+            userDoc.birthDate = birthDate;
+            userDoc.color = color;
+            userDoc.updatedAt = new Date().toISOString();
+
+            const response = await usersDb.insert(userDoc);
+            return res.status(200).json({ message: 'User updated', id: response.id });
+        } else {
+            return res.status(400).json({ message: 'Invalid context' });
         }
-
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        const userDoc = {
-            username,
-            password: hashedPassword, // Store the hashed password
-            birthDate,
-            color,
-            createdAt: new Date().toISOString(),
-        };
-
-        const response = await usersDb.insert(userDoc);
-        res.status(201).json({ message: 'User created', id: response.id });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Failed to create user' });
+        res.status(500).json({ message: 'Failed to process request' });
     }
 });
 

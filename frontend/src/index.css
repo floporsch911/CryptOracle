@@ -156,6 +156,10 @@ nav>.container {
     min-width: 300px;
 }
 
+.main-element p {
+    margin: 0;
+}
+
 .horoscope-fetcher {
     flex: 1 1 40%;
     max-width: 50%;
@@ -242,4 +246,15 @@ nav>.container {
 .error-container {
     background-color: rgb(89, 94, 135) !important;
     color: rgb(248, 99, 99) !important;
+}
+
+.success-container {
+    background-color: rgb(89, 94, 135) !important;
+    color: rgb(97, 225, 99) !important;
+}
+
+.username-muted {
+    background-color: rgb(89, 94, 135) !important;
+    border: none !important;
+    color: #ffffff !important;
 }
