@@ -21,12 +21,13 @@ Nous voulons également permettre à l'utilisateur de s'informer sur les tendanc
 
 - [Horoscope API](https://horoscope-app-api.vercel.app/) : API permettant de récupérer les horoscopes quotidiens pour chaque signe astrologique.
 - [Binance API](https://github.com/binance/binance-spot-api-docs) : API permettant de récupérer les données financières des cryptomonnaies.
-- [Telegram API]( https://core.telegram.org/api) : API permettant d'envoyer des messages sur Telegram.
+- [CoinTelegraph RSS](https://cointelegraph.com/rss) : Flux RSS permettant de récupérer les actualités liées aux cryptomonnaies.
 
 ### Services internes
 
 - **Calcul gain/perte** : Service permettant de calculer les gains et pertes en fonction des tendances des cryptomonnaies.
 - **Reformulation IA** : Service permettant de reformuler les horoscopes pour les rendre plus adaptés à la cryptomonnaie. (Modèle ollama tournant en local, API REST).
+- **CouchDB** : Base de données NoSQL permettant de stocker les données des utilisateurs.
 
 ## Le lancer
 
