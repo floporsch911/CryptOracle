@@ -6,11 +6,11 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const nano = require('nano')('http://admin:password@couchdb:5984');
 const parser = new Parser();
-const bcrypt = require('bcrypt');
+const qs = require('querystring');
 
 const app = express();
 const PORT = 4000;
-const DB_NAME = 'users';
+const DB_NAME = '_users';
 
 // API URLs - going through Nginx
 const HOROSCOPE_API_URL = 'http://nginx-proxy/horoscope/api/v1/get-horoscope/daily';
@@ -113,30 +113,28 @@ app.post('/users', async (req, res) => {
     }
 
     try {
-        if (context === 'createAccount') {
-            // Check if the password is defined 
-            if (!password) {
-                return res.status(400).json({ message: 'Password is required' });
-            }
-            // Check if a user with the same username already exists
-            const existingUser = await usersDb.find({
-                selector: { username }
-            });
+        // Compose CouchDB _users document ID
+        const userId = `org.couchdb.user:${username}`;
 
-            if (existingUser.docs.length > 0) {
-                return res.status(409).json({ message: 'Username already exists' });
-            }
+        // Check if user exists
+        try {
+            await usersDb.get(userId);
+            return res.status(409).json({ message: 'Username already exists' });
+        } catch (err) {
+            if (err.statusCode !== 404) throw err;  // If not a 404, rethrow
+        }
 
-            // Hash the password
-            const hashedPassword = await bcrypt.hash(password, 10);
-
-            const userDoc = {
-                username,
-                password: hashedPassword, // Store the hashed password
-                birthDate,
-                color,
-                createdAt: new Date().toISOString(),
-            };
+        // User doc format as expected by CouchDB _users db
+        const userDoc = {
+            _id: userId,
+            name: username,
+            type: 'user',
+            roles: [],
+            password: password,  // Send plain password, CouchDB will hash it
+            birthDate,
+            color,
+            createdAt: new Date().toISOString(),
+        };
 
             const response = await usersDb.insert(userDoc);
             return res.status(201).json({ message: 'User created', id: response.id });
@@ -177,35 +175,30 @@ app.post('/login', async (req, res) => {
     }
 
     try {
-        const result = await usersDb.find({
-            selector: { username }
+        const formData = qs.stringify({ name: username, password });
+        const loginResponse = await axios.post('http://admin:password@couchdb:5984/_session', formData, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         });
 
-        const user = result.docs[0];
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+        if (loginResponse.data.ok) {
+            // Fetch user document from CouchDB
+            const userId = `org.couchdb.user:${username}`;
+            const userDoc = await usersDb.get(userId);
+            // Return relevant user info
+            return res.status(200).json({
+                message: 'Login successful',
+                user: {
+                    username: userDoc.name,
+                    birthDate: userDoc.birthDate,
+                    color: userDoc.color
+                }
+            });
+        } else {
+            return res.status(401).json({ message: 'Invalid credentials' });
         }
-
-        // Compare the provided password with the hashed password
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Incorrect password' });
-        }
-
-        return res.status(200).json({
-            message: 'Login successful',
-            user: {
-                username: user.username,
-                birthDate: user.birthDate,
-                color: user.color
-            }
-        });
-
     } catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: 'Login failed' });
+        console.error(err.response?.data || err.message);
+        return res.status(401).json({ message: 'Login failed' });
     }
 });
 
