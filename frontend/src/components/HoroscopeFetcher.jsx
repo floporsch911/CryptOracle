@@ -42,15 +42,16 @@ function HoroscopeFetcher() {
       const response = await axios.post("/api/horoscope", {
         date: birthDate,
       });
-      setHoroscope(response.data.horoscope);
-      setSign(response.data.sign);
+      setHoroscope(response?.data?.horoscope || "No horoscope available.");
+      setSign(response?.data?.sign || "Unknown");
       localStorage.setItem(
         "horoscope",
-        JSON.stringify(response.data.horoscope)
+        JSON.stringify(response?.data?.horoscope || "No horoscope available.")
       );
-      localStorage.setItem("sign", JSON.stringify(response.data.sign));
+      localStorage.setItem("sign", JSON.stringify(response?.data?.sign || "Unknown"));
     } catch (error) {
       setHoroscope("Error fetching horoscope.");
+      setSign("Unknown");
       console.error(error);
     } finally {
       setLoading(false);

@@ -92,28 +92,39 @@ app.post('/horoscope', async (req, res) => {
         const formattedSign = sign.toLowerCase().replace(/\s+/g, '-');
 
         // Step 1: Fetch the horoscope
-        const horoscopeResponse = await axios.get(HOROSCOPE_API_URL, {
-            params: {
-                sign: formattedSign,
-                day: 'TODAY'
-            }
-        });
-
-        const horoscopeData = horoscopeResponse.data.data.horoscope_data;
+        let horoscopeData = '';
+        try {
+            const horoscopeResponse = await axios.get(HOROSCOPE_API_URL, {
+                params: {
+                    sign: formattedSign,
+                    day: 'TODAY'
+                }
+            });
+            horoscopeData = horoscopeResponse?.data?.data?.horoscope_data || horoscopeResponse?.data?.horoscope || '';
+        } catch (e) {
+            horoscopeData = '';
+        }
 
         // Step 2: Reformulate through Ollama
-        const promptIntro = "Transform the following horoscope into creative investment advice for the world of cryptocurrency. Keep the spirit of the horoscope but express it in no more than 4 or 5 imaginative, engaging sentences. Make it light, playful, and insightful—like a quick cosmic tip for a crypto trader.";
-        const fullPrompt = `${promptIntro}\n${horoscopeData}`;
-
-        const ollamaResponse = await axios.post(OLLAMA_API_URL, {
-            model: 'mistral:7b',
-            prompt: fullPrompt,
-            stream: false
-        });
-
-        const rephrasedHoroscope = ollamaResponse.data.response;
-
-        return negotiateResponse(req, res, { sign: sign, horoscope: rephrasedHoroscope }, "horoscope", 200);
+        let rephrasedHoroscope = '';
+        if (horoscopeData) {
+            const promptIntro = "Transform the following horoscope into creative investment advice for the world of cryptocurrency. Keep the spirit of the horoscope but express it in no more than 4 or 5 imaginative, engaging sentences. Make it light, playful, and insightful—like a quick cosmic tip for a crypto trader.";
+            const fullPrompt = `${promptIntro}\n${horoscopeData}`;
+            try {
+                const ollamaResponse = await axios.post(OLLAMA_API_URL, {
+                    model: 'mistral:7b',
+                    prompt: fullPrompt,
+                    stream: false
+                });
+                rephrasedHoroscope = ollamaResponse?.data?.response || ollamaResponse?.data?.result || '';
+            } catch (e) {
+                rephrasedHoroscope = '';
+            }
+        }
+        return negotiateResponse(req, res, {
+            sign: sign,
+            horoscope: rephrasedHoroscope || "Aucune prédiction disponible pour aujourd'hui."
+        }, "horoscope", 200);
 
     } catch (error) {
         console.error('Backend Error:', error.response?.data || error.message);
@@ -220,25 +231,28 @@ app.post('/login', async (req, res) => {
 
 app.get('/crypto-news', async (req, res) => {
     try {
-
-        const response = await axios.get(CRYPTO_NEWS_API_URL, {
-            headers: {
-                'Accept': 'application/rss+xml, application/xml;q=0.9, */*;q=0.8',
-                'User-Agent': 'Mozilla/5.0 (Node.js server)' 
-            },
-            responseType: 'text'
-        });
-        res.set('Content-Type', 'application/rss+xml');
-        // Parse the RSS XML from response.data
-        const feed = await parser.parseString(response.data);
-        if (!feed || !feed.items) {
+        let feed;
+        try {
+            const response = await axios.get(CRYPTO_NEWS_API_URL, {
+                headers: {
+                    'Accept': 'application/rss+xml, application/xml;q=0.9, */*;q=0.8',
+                    'User-Agent': 'Mozilla/5.0 (Node.js server)'
+                },
+                responseType: 'text'
+            });
+            // Tolerant Reader: parser peut échouer ou le format peut varier
+            feed = await parser.parseString(response?.data || '');
+        } catch (e) {
+            feed = null;
+        }
+        if (!feed || !Array.isArray(feed.items)) {
             return negotiateResponse(req, res, { error: "Impossible de lire le flux RSS." }, "error", 500);
         }
         const news = feed.items.slice(0, 5).map(item => ({
-            title: item.title,
-            link: item.link,
-            summary: item.contentSnippet,
-            date: item.pubDate
+            title: item?.title || "Titre inconnu",
+            link: item?.link || "",
+            summary: item?.contentSnippet || item?.summary || "",
+            date: item?.pubDate || item?.date || ""
         }));
         return negotiateResponse(req, res, news, "news", 200);
     } catch (error) {

@@ -44,13 +44,13 @@ function CryptoNews() {
         </div>
       )}
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {news.map((item, index) => (
+        {Array.isArray(news) && news.map((item, index) => (
           <News
             key={index}
-            title={item.title}
-            summary={item.summary}
-            date={item.date}
-            link={item.link}
+            title={item?.title || 'Unknown Title'}
+            summary={item?.summary || 'No summary available'}
+            date={item?.date || new Date().toISOString()}
+            link={item?.link || '#'}
             maxLength={100}
           />
         ))}
