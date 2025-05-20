@@ -29,6 +29,20 @@ Nous voulons également permettre à l'utilisateur de s'informer sur les tendanc
 - **Reformulation IA** : Service permettant de reformuler les horoscopes pour les rendre plus adaptés à la cryptomonnaie. (Modèle ollama tournant en local, API REST).
 - **CouchDB** : Base de données NoSQL permettant de stocker les données des utilisateurs.
 
+## Patrons de conception utilisés
+
+### Reverse Proxy
+
+Notre projet utilise un reverse proxy NGINX afin de centraliser et sécuriser l'accès à l'ensemble des services, qu'ils soient internes (API de prédiction, calculs, IA) ou externes (Binance, Horoscope, CoinTelegraph). Grâce à NGINX, toutes les requêtes des utilisateurs transitent par un point d'entrée unique, ce qui facilite la configuration du CORS ou encore la maintenance en cas de modification des services consommés. De plus, cela permet de simplifier l'architecture en masquant la complexité des différents services et en assurant une meilleure évolutivité et maintenance du projet.
+
+### MediaType Negotiation
+
+Le projet utilise la négociation de type média pour permettre aux clients de spécifier le format de réponse souhaité (JSON ou XML) lors des appels aux API. Cela permet d'offrir une flexibilité aux utilisateurs et de s'adapter à différents cas d'utilisation. En fonction du type de contenu demandé, le serveur renvoie la réponse dans le format approprié, facilitant ainsi l'intégration avec différents clients et langages de programmation.
+
+### Tolerant Reader
+
+Le projet utilise le patron de conception Tolerant Reader pour gérer les variations dans les réponses des API externes. En raison de la nature dynamique des données financières et des horoscopes, il est possible que certaines informations soient manquantes ou diffèrent légèrement d'une réponse à l'autre. En adoptant ce patron, nous avons conçu notre code pour être résilient face à ces variations, en s'assurant que même si certaines données sont absentes ou modifiées, le système continue de fonctionner correctement et de fournir une expérience utilisateur fluide.
+
 ## Le lancer
 
 ### Prérequis
