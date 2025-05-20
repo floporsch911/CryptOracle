@@ -181,6 +181,7 @@ nav>.container {
     overflow-y: auto;
     box-sizing: border-box;
     border-bottom: solid 10px rgb(89, 94, 135);
+    border-top: solid 10px rgb(89, 94, 135);
 }
 
 .sticky-title {
@@ -188,7 +189,7 @@ nav>.container {
     top: 0;
     background: rgb(89, 94, 135);
     z-index: 1;
-    padding-top: 1em;
+    padding-top: 0.5em;
     padding-bottom: 0.5em;
     border-bottom: solid 1px rgb(198, 199, 242);
 }
