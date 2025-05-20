@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const nano = require('nano')('http://admin:password@couchdb:5984');
 const parser = new Parser();
 const qs = require('querystring');
+const js2xmlparser = require('js2xmlparser');
 
 const app = express();
 const PORT = 4000;
@@ -28,8 +29,10 @@ app.use(bodyParser.json());
     }
 })();
 
+// Use the CouchDB _users database
 const usersDb = nano.db.use(DB_NAME);
 
+// Function to determine zodiac sign based on birth date
 function getZodiacSign(day, month) {
     const zodiacSigns = [
         { sign: "Capricorn", from: { day: 22, month: 12 }, to: { day: 19, month: 1 } },
@@ -58,16 +61,29 @@ function getZodiacSign(day, month) {
     return "Capricorn";
 }
 
+// Helper to negotiate response type
+function negotiateResponse(req, res, data, rootName = "response", status = 200) {
+    const accept = req.headers.accept || '';
+    res.status(status);
+    if (accept.includes('application/xml') || accept.includes('text/xml')) {
+        res.set('Content-Type', 'application/xml');
+        res.send(js2xmlparser.parse(rootName, data));
+    } else {
+        res.json(data);
+    }
+}
+
+// handles the horoscope post request
 app.post('/horoscope', async (req, res) => {
     const { date } = req.body;
     if (!date) {
-        return res.status(400).json({ error: "The date is required." });
+        return negotiateResponse(req, res, { error: "The date is required." }, "error", 400);
     }
 
     try {
         const [yearStr, monthStr, dayStr] = date.split('-');
         if (yearStr.length !== 4 || monthStr.length !== 2 || dayStr.length !== 2) {
-            return res.status(400).json({ error: "Invalid date format. Use YYYY-MM-DD." });
+            return negotiateResponse(req, res, { error: "Invalid date format. Use YYYY-MM-DD." }, "error", 400);
         }
         const month = parseInt(monthStr, 10);
         const day = parseInt(dayStr, 10);
@@ -97,11 +113,11 @@ app.post('/horoscope', async (req, res) => {
 
         const rephrasedHoroscope = ollamaResponse.data.response;
 
-        return res.json({ sign: sign, horoscope: rephrasedHoroscope });
+        return negotiateResponse(req, res, { sign: sign, horoscope: rephrasedHoroscope }, "horoscope", 200);
 
     } catch (error) {
         console.error('Backend Error:', error.response?.data || error.message);
-        return res.status(500).json({ error: 'Failed to generate horoscope.' });
+        return negotiateResponse(req, res, { error: 'Failed to generate horoscope.' }, "error", 500);
     }
 });
 
@@ -109,7 +125,7 @@ app.post('/horoscope', async (req, res) => {
 app.post('/users', async (req, res) => {
     const { context, username, password, birthDate, color } = req.body;
     if (!context || !username || !birthDate || !color) {
-        return res.status(400).json({ message: 'Missing required fields' });
+        return negotiateResponse(req, res, { message: 'Missing required fields' }, "error", 400);
     }
 
     try {
@@ -119,7 +135,7 @@ app.post('/users', async (req, res) => {
             // Check if user exists
             try {
                 await usersDb.get(userId);
-                return res.status(409).json({ message: 'Username already exists' });
+                return negotiateResponse(req, res, { message: 'Username already exists' }, "error", 409);
             } catch (err) {
                 if (err.statusCode !== 404) throw err;  // If not a 404, rethrow
             }
@@ -137,18 +153,17 @@ app.post('/users', async (req, res) => {
             };
 
             const response = await usersDb.insert(userDoc);
-            return res.status(201).json({ message: 'User created', id: response.id });
+            return res.status(200).json({ message: 'User updated', id: response.id });
         } else if (context === 'modifyAccount') {
             // Find the existing user document
             try {
                 await usersDb.get(userId);
             } catch (err) {
                 if (err.statusCode === 404) {
-                    return res.status(404).json({ message: 'User not found' });
+                    return negotiateResponse(req, res, { message: 'User not found' }, "error", 404);
                 }
                 throw err;  // Rethrow other errors
             }
-            
             // Fetch the user document
             const userDoc = await usersDb.get(userId);
             // Update the user document
@@ -157,13 +172,13 @@ app.post('/users', async (req, res) => {
             userDoc.updatedAt = new Date().toISOString();
 
             const response = await usersDb.insert(userDoc);
-            return res.status(200).json({ message: 'User updated', id: response.id });
+            return negotiateResponse(req, res, { message: 'User updated', id: response.id }, "user", 200);
         } else {
-            return res.status(400).json({ message: 'Invalid context' });
+            return negotiateResponse(req, res, { message: 'Invalid context' }, "error", 400);
         }
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: 'Failed to process request' });
+        return negotiateResponse(req, res, { message: 'Failed to process request' }, "error", 500);
     }
 });
 
@@ -172,7 +187,7 @@ app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return res.status(400).json({ message: 'Missing username or password' });
+        return negotiateResponse(req, res, { message: 'Missing username or password' }, "error", 400);
     }
 
     try {
@@ -186,20 +201,20 @@ app.post('/login', async (req, res) => {
             const userId = `org.couchdb.user:${username}`;
             const userDoc = await usersDb.get(userId);
             // Return relevant user info
-            return res.status(200).json({
+            return negotiateResponse(req, res, {
                 message: 'Login successful',
                 user: {
                     username: userDoc.name,
                     birthDate: userDoc.birthDate,
                     color: userDoc.color
                 }
-            });
+            }, "login", 200);
         } else {
-            return res.status(401).json({ message: 'Invalid credentials' });
+            return negotiateResponse(req, res, { message: 'Invalid credentials' }, "error", 401);
         }
     } catch (err) {
         console.error(err.response?.data || err.message);
-        return res.status(401).json({ message: 'Login failed' });
+        return negotiateResponse(req, res, { message: 'Login failed' }, "error", 401);
     }
 });
 
@@ -209,7 +224,7 @@ app.get('/crypto-news', async (req, res) => {
         const response = await axios.get(CRYPTO_NEWS_API_URL, {
             headers: {
                 'Accept': 'application/rss+xml, application/xml;q=0.9, */*;q=0.8',
-                'User-Agent': 'Mozilla/5.0 (Node.js server)' // Some servers require a valid UA
+                'User-Agent': 'Mozilla/5.0 (Node.js server)' 
             },
             responseType: 'text'
         });
@@ -217,7 +232,7 @@ app.get('/crypto-news', async (req, res) => {
         // Parse the RSS XML from response.data
         const feed = await parser.parseString(response.data);
         if (!feed || !feed.items) {
-            return res.status(500).json({ error: "Impossible de lire le flux RSS." });
+            return negotiateResponse(req, res, { error: "Impossible de lire le flux RSS." }, "error", 500);
         }
         const news = feed.items.slice(0, 5).map(item => ({
             title: item.title,
@@ -225,10 +240,10 @@ app.get('/crypto-news', async (req, res) => {
             summary: item.contentSnippet,
             date: item.pubDate
         }));
-        res.json(news);
+        return negotiateResponse(req, res, news, "news", 200);
     } catch (error) {
         console.error("RSS error:", error.message);
-        res.status(500).json({ error: "Impossible de lire le flux RSS ${error.message}" });
+        return negotiateResponse(req, res, { error: `Impossible de lire le flux RSS ${error.message}` }, "error", 500);
     }
 });
 
