@@ -19,7 +19,6 @@ const ProfilPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUserData({ ...userData, context: "modifyAccount" });
-    console.log(userData);
     try {
       const response = await fetch("/api/users", {
         method: "POST",

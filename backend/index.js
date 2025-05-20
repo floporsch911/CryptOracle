@@ -115,41 +115,42 @@ app.post('/users', async (req, res) => {
     try {
         // Compose CouchDB _users document ID
         const userId = `org.couchdb.user:${username}`;
+        if (context === 'createAccount') {
+            // Check if user exists
+            try {
+                await usersDb.get(userId);
+                return res.status(409).json({ message: 'Username already exists' });
+            } catch (err) {
+                if (err.statusCode !== 404) throw err;  // If not a 404, rethrow
+            }
 
-        // Check if user exists
-        try {
-            await usersDb.get(userId);
-            return res.status(409).json({ message: 'Username already exists' });
-        } catch (err) {
-            if (err.statusCode !== 404) throw err;  // If not a 404, rethrow
-        }
-
-        // User doc format as expected by CouchDB _users db
-        const userDoc = {
-            _id: userId,
-            name: username,
-            type: 'user',
-            roles: [],
-            password: password,  // Send plain password, CouchDB will hash it
-            birthDate,
-            color,
-            createdAt: new Date().toISOString(),
-        };
+            // User doc format as expected by CouchDB _users db
+            const userDoc = {
+                _id: userId,
+                name: username,
+                type: 'user',
+                roles: [],
+                password: password,  // Send plain password, CouchDB will hash it
+                birthDate,
+                color,
+                createdAt: new Date().toISOString(),
+            };
 
             const response = await usersDb.insert(userDoc);
             return res.status(201).json({ message: 'User created', id: response.id });
         } else if (context === 'modifyAccount') {
             // Find the existing user document
-            const existingUser = await usersDb.find({
-                selector: { username }
-            });
-
-            if (existingUser.docs.length === 0) {
-                return res.status(404).json({ message: 'User not found' });
+            try {
+                await usersDb.get(userId);
+            } catch (err) {
+                if (err.statusCode === 404) {
+                    return res.status(404).json({ message: 'User not found' });
+                }
+                throw err;  // Rethrow other errors
             }
-
-            const userDoc = existingUser.docs[0];
-
+            
+            // Fetch the user document
+            const userDoc = await usersDb.get(userId);
             // Update the user document
             userDoc.birthDate = birthDate;
             userDoc.color = color;
