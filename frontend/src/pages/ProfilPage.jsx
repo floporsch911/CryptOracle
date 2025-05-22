@@ -18,18 +18,19 @@ const ProfilPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUserData({ ...userData, context: "modifyAccount" });
+    const updatedUser = { ...userData, context: "modifyAccount" };
     try {
       const response = await fetch("/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(updatedUser),
       });
 
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(userData));
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        setUserData(updatedUser);
         setMessage("Profile updated successfully!");
         setError(false);
         setShowToast(true);
@@ -124,7 +125,7 @@ const ProfilPage = () => {
           autohide
           className={error ? "error-container" : "success-container"}
         >
-          <Toast.Body className="nunito-body">
+          <Toast.Body className="text-toast nunito-body">
             {message}
           </Toast.Body>
         </Toast>

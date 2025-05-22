@@ -109,7 +109,7 @@ const LoginPage = () => {
           autohide
           className="error-container"
         >
-          <Toast.Body className="nunito-body">
+          <Toast.Body className="text-toast nunito-body">
             <ExclamationTriangleFill className="me-2" />
             {errorMessage}
           </Toast.Body>
