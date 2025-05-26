@@ -8,10 +8,12 @@ const nano = require('nano')('http://admin:password@couchdb:5984');
 const parser = new Parser();
 const qs = require('querystring');
 const js2xmlparser = require('js2xmlparser');
+const fs = require('fs').promises;
+const path = require('path');
 
 const app = express();
 const PORT = 4000;
-const DB_NAME = '_users';
+const DB_USERS = '_users';
 
 // API URLs - going through Nginx
 const HOROSCOPE_API_URL = 'http://nginx-proxy/horoscope/api/v1/get-horoscope/daily';
@@ -21,16 +23,41 @@ const CRYPTO_NEWS_API_URL = 'http://nginx-proxy/crypto-news';
 app.use(cors());
 app.use(bodyParser.json());
 
-// Ensure DB exists
+// Ensure DB _users exists
 (async () => {
     const dbList = await nano.db.list();
-    if (!dbList.includes(DB_NAME)) {
-        await nano.db.create(DB_NAME);
+    if (!dbList.includes(DB_USERS)) {
+        await nano.db.create(DB_USERS);
+    }
+})();
+
+// Ensure 'questions' DB exists and populate it
+(async () => {
+    const dbList = await nano.db.list();
+    const QUESTIONS_DB_NAME = 'questions';
+
+    if (!dbList.includes(QUESTIONS_DB_NAME)) {
+        await nano.db.create(QUESTIONS_DB_NAME);
+        const questionsDb = nano.db.use(QUESTIONS_DB_NAME);
+
+        try {
+            const questionsPath = path.join(__dirname, 'data', 'questions.json');
+            const fileData = await fs.readFile(questionsPath, 'utf-8');
+            const questions = JSON.parse(fileData);
+
+            // Format as CouchDB bulk docs
+            const docs = questions.map(q => ({ ...q }));
+            await questionsDb.bulk({ docs });
+
+            console.log('Questions successfully inserted into CouchDB.');
+        } catch (err) {
+            console.error('Failed to insert questions:', err.message);
+        }
     }
 })();
 
 // Use the CouchDB _users database
-const usersDb = nano.db.use(DB_NAME);
+const usersDb = nano.db.use(DB_USERS);
 
 // Function to determine zodiac sign based on birth date
 function getZodiacSign(day, month) {
@@ -258,6 +285,29 @@ app.get('/crypto-news', async (req, res) => {
     } catch (error) {
         console.error("RSS error:", error.message);
         return negotiateResponse(req, res, { error: `Impossible de lire le flux RSS ${error.message}` }, "error", 500);
+    }
+});
+
+app.get('/question', async (req, res) => {
+    try {
+        const questionsDb = nano.db.use('questions');
+        // Get all _ids first
+        const result = await questionsDb.list({ include_docs: false });
+        const total = result.rows.length;
+
+        if (total === 0) {
+            return negotiateResponse(req, res, { error: "No questions available" }, "error", 404);
+        }
+
+        // Pick a random document
+        const randomIndex = Math.floor(Math.random() * total);
+        const randomId = result.rows[randomIndex].id;
+
+        const doc = await questionsDb.get(randomId);
+        return negotiateResponse(req, res, doc, "question", 200);
+    } catch (error) {
+        console.error("Error fetching question:", error.message);
+        return negotiateResponse(req, res, { error: 'Failed to fetch question' }, "error", 500);
     }
 });
 

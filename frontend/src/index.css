@@ -165,12 +165,12 @@ nav>.container {
     color: rgb(198, 199, 242);
     font-style: italic;
     padding: 0.5rem;
+    text-align: center;
 }
 
 .main-element {
     background-color: rgb(89, 94, 135);
     border-radius: 15px;
-    padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: 10px;
     min-width: 300px;
@@ -181,10 +181,12 @@ nav>.container {
 }
 
 .horoscope-fetcher {
-    flex: 1 1 40%;
+    flex: 1 1 30%;
     max-width: 50%;
     box-sizing: border-box;
     display: flex;
+    padding: 20px;
+    height: 25rem;
     flex-direction: column;
     justify-content: center;
 }
@@ -196,12 +198,90 @@ nav>.container {
     color: rgb(232, 232, 252);
 }
 
+.question-fetcher {
+    flex: 1 1 30%;
+    max-width: 50%;
+    box-sizing: border-box;
+    display: flex;
+    min-height: 10rem;
+    flex-direction: column;
+    position: relative;
+}
+
+.question-header {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    min-height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 40px 0 20px;
+}
+
+.question-header .title {
+    flex: 1;
+    text-align: center;
+    position: static;
+}
+
+.question-header .btn-share {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.question-content-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 0;
+    padding: 20px;
+}
+
+.question-content, .advice-block, .loading-container {
+    width: 100%;
+}
+
+.btn-answer-question {
+    background-color: rgb(198, 199, 242);
+    color: rgb(47, 45, 75);
+    padding: 10px 15px;
+    border-radius: 0.7rem;
+    border: none;
+    transition: background-color 0.3s ease;
+    font-size: 1rem;
+}
+
+.btn-answer-question:hover {
+    background-color: rgb(47, 45, 75);
+    color: rgb(198, 199, 242);
+}
+
+.advice-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.advice-block p {
+    margin: 0;
+    font-style: italic;
+    text-align: center;
+    letter-spacing: 0.02em;
+    line-height: 1.5;
+}
+
 .crypto-news {
-    flex: 1 1 50%;
+    flex: 1 1 30%;
     max-width: 60%;
-    height: 20rem;
     padding: 1em;
     overflow-y: auto;
+    height: 25rem;
     box-sizing: border-box;
     border-bottom: solid 10px rgb(89, 94, 135);
     border-top: solid 10px rgb(89, 94, 135);

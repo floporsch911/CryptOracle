@@ -4,6 +4,7 @@ import Main from '../components/Main';
 import Footer from '../components/Footer';
 import CryptoNews from "../components/CryptoNews";
 import HoroscopeFetcher from "../components/HoroscopeFetcher";
+import QuestionFetcher from "../components/QuestionFetcher";
 
 const MainPage = () => {
     return (
@@ -13,6 +14,7 @@ const MainPage = () => {
                 <div className="main-page-container">
                     <HoroscopeFetcher />
                     <CryptoNews />
+                    <QuestionFetcher />
                 </div>
             </Main >
             <Footer />

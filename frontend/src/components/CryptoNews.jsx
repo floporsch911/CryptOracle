@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import News from './News'; // Assure-toi que le chemin est correct
+import News from './News';
 
 function CryptoNews() {
   const [news, setNews] = useState([]);
@@ -43,7 +43,7 @@ function CryptoNews() {
           <p>{error}</p>
         </div>
       )}
-      <ul style={{ listStyle: 'none', padding: 0 }}>
+      <ul style={{ listStyle: 'none', paddingTop: 0 }}>
         {Array.isArray(news) && news.map((item, index) => (
           <News
             key={index}
