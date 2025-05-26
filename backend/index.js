@@ -164,7 +164,7 @@ app.post('/users', async (req, res) => {
             };
 
             const response = await usersDb.insert(userDoc);
-            return res.status(200).json({ message: 'User updated', id: response.id });
+            return res.status(200).json({ message: 'User created', id: response.id });
         } else if (context === 'modifyAccount') {
             // Find the existing user document
             try {
