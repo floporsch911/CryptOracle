@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header";
 import Main from "../components/Main";
 import Footer from "../components/Footer";
@@ -11,6 +11,15 @@ const HomePage = () => {
   const handleCreateAccountClick = () => {
     navigate("/createAccount");
   };
+
+  useEffect(() => {
+    // if user is already logged in, redirect to main page
+    const user = localStorage.getItem("user");
+    if (user) {
+      navigate("/main");
+    }
+  }, [navigate]);
+
 
   return (
     <div className="app-container text-light">

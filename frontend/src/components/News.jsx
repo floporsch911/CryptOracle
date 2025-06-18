@@ -1,5 +1,3 @@
-import React from "react";
-import "./News.css";
 
 function NewsItem({
   title = "Unknown title",

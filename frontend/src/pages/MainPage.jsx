@@ -6,8 +6,8 @@ import CryptoNews from "../components/CryptoNews";
 import HoroscopeFetcher from "../components/HoroscopeFetcher";
 import QuestionFetcher from "../components/QuestionFetcher";
 import { Display } from "react-bootstrap-icons";
-import FinancialChart from "../components/chart/financialChart";
-import CalculGainCrypto from "../components/calculGainCrypto/calculGainCrypto";
+import FinancialChart from "../components/chart/FinancialChart";
+import CalculGainCrypto from "../components/CalculGainCrypto";
 
 const MainPage = () => {
     const [selectedSymbol, setSelectedSymbol] = useState({ symbol: "BTCUSDT", name: "BTC" });
@@ -20,8 +20,6 @@ const MainPage = () => {
                         <HoroscopeFetcher />
                         <CryptoNews />
                         <QuestionFetcher />
-                    </div>
-                    <div className="main-page-container" style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
                         <div style={{ flex: 3 }}>
                             <FinancialChart selectedSymbol={selectedSymbol} setSelectedSymbol={setSelectedSymbol} />
                         </div>
@@ -29,7 +27,6 @@ const MainPage = () => {
                             <CalculGainCrypto selectedSymbol={selectedSymbol} />
                         </div>
                     </div>
-
                 </div>
             </Main >
             <Footer />

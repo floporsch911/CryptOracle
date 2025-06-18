@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import "./selectCrypto.css"
 
 export default function SelectCrypto({ selectedSymbol, setSelectedSymbol }) {
     const [symbols, setSymbols] = useState([]);
@@ -9,7 +8,6 @@ export default function SelectCrypto({ selectedSymbol, setSelectedSymbol }) {
     SelectCrypto.propTypes = {
         selectedSymbol: PropTypes.shape({
             symbol: PropTypes.string.isRequired,
-            // ajoutez d'autres propriétés si besoin
         }).isRequired,
         setSelectedSymbol: PropTypes.func.isRequired,
     };
@@ -23,7 +21,6 @@ export default function SelectCrypto({ selectedSymbol, setSelectedSymbol }) {
                 console.error('Erreur lors du chargement des symboles Binance :', error);
             }
         };
-
         fetchSymbols();
     }, []);
 
@@ -37,8 +34,8 @@ export default function SelectCrypto({ selectedSymbol, setSelectedSymbol }) {
     };
 
     return (
-        <div className='select-container'>
-            <span style={{ alignSelf: "center" }}>Crypto currency</span>
+        <div className='select-container nunito-body'>
+            <span style={{ alignSelf: "center" }}>Currency</span>
             <select value={selectedSymbol.symbol} onChange={handleChange} className='select-container-drop-down'>
                 {symbols.map((symbol) => (
                     <option key={symbol.symbol} value={symbol.symbol} >

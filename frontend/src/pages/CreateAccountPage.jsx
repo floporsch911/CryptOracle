@@ -24,7 +24,7 @@ const CreateAccountPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedUser = { ...formData, context: "modifyAccount" };
+    const updatedUser = { ...formData, context: "createAccount" };
     try {
       const response = await fetch("/api/users", {
         method: "POST",

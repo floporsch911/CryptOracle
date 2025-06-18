@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createChart, CandlestickSeries } from 'lightweight-charts';
 import axios from 'axios';
-import IntervalBouton from "./Widget/intervalBouton"
-import SelectCrypto from './Widget/selectCrypto';
+import IntervalBouton from "./IntervalBouton"
+import SelectCrypto from './SelectCrypto';
 import PropTypes from 'prop-types';
-import "./financialChart.css"
 
 export default function FinancialChart({ selectedSymbol, setSelectedSymbol }) {
   const chartContainerRef = useRef();
@@ -90,8 +89,7 @@ export default function FinancialChart({ selectedSymbol, setSelectedSymbol }) {
     const chartOptions = {
       layout: {
         textColor: 'white',
-        background: { type: 'solid', color: 'black' },
-
+        background: { type: 'solid', color: '#595e87' },
       },
       height: 400,
       width: chartContainerRef.current?.clientWidth || 500,
@@ -191,7 +189,7 @@ export default function FinancialChart({ selectedSymbol, setSelectedSymbol }) {
     chartRef.current?.timeScale().scrollToRealTime();
   };
   return (
-    <div>
+    <div className='main-element financial-chart nunito-body'>
 
       <div style={{
         display: "flex",
