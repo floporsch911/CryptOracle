@@ -4,6 +4,7 @@ import Main from '../components/Main';
 import Footer from '../components/Footer';
 import CryptoNews from "../components/CryptoNews";
 import HoroscopeFetcher from "../components/HoroscopeFetcher";
+import QuestionFetcher from "../components/QuestionFetcher";
 import { Display } from "react-bootstrap-icons";
 import FinancialChart from "../components/chart/financialChart";
 import CalculGainCrypto from "../components/calculGainCrypto/calculGainCrypto";
@@ -18,6 +19,7 @@ const MainPage = () => {
                     <div className="main-page-container">
                         <HoroscopeFetcher />
                         <CryptoNews />
+                        <QuestionFetcher />
                     </div>
                     <div className="main-page-container" style={{ display: "flex", gap: "16px", alignItems: "flex-start" }}>
                         <div style={{ flex: 3 }}>

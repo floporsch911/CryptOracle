@@ -24,21 +24,20 @@ const CreateAccountPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormData({...formData, context: "createAccount"});
+    const updatedUser = { ...formData, context: "modifyAccount" };
     try {
       const response = await fetch("/api/users", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedUser),
       });
 
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(formData));
+        localStorage.setItem("user", JSON.stringify(updatedUser));
         // Redirect to the main page
         navigate("/main");
-
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.message);

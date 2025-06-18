@@ -115,7 +115,7 @@ function HoroscopeFetcher() {
 
   return (
     <div className="main-element horoscope-fetcher">
-      <div className="orbitron title">Crypto Horoscope of the day</div>
+      <div className="orbitron title">Horoscope of the day</div>
       {loading && (
         <div className="loading-container">
           <div className="spinner-border" role="status">

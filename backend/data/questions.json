@@ -1,0 +1,202 @@
+[
+  {
+    "_id": "question_1",
+    "type": "question",
+    "question": "If a pancake sings at midnight, what do you do?",
+    "answers": [
+      { "text": "Join the chorus", "advice": "Buy Dogecoin, it's time for musical memes." },
+      { "text": "Eat the pancake", "advice": "Sell Bitcoin, breakfast is over." },
+      { "text": "Call the waffle police", "advice": "Stake some ETH, safety first." }
+    ]
+  },
+  {
+    "_id": "question_2",
+    "type": "question",
+    "question": "A duck offers you a business card. What's your move?",
+    "answers": [
+      { "text": "Hire the duck", "advice": "Invest in Web3 startups, even the feathery ones." },
+      { "text": "Quack politely", "advice": "Hold your crypto. Politeness pays off." },
+      { "text": "Throw breadcrumbs", "advice": "Buy low-cap coins, small crumbs, big gains." }
+    ]
+  },
+  {
+    "_id": "question_3",
+    "type": "question",
+    "question": "You find a spoon inside your shoe. Now what?",
+    "answers": [
+      { "text": "Eat your socks", "advice": "Time to rebalance your portfolio, it stinks." },
+      { "text": "Wear a fork", "advice": "Go long on ETH. It's sharp and classy." },
+      { "text": "Ignore it", "advice": "HODL. Some things are best left unexplained." }
+    ]
+  },
+  {
+    "_id": "question_4",
+    "type": "question",
+    "question": "The moon winks at you. How do you respond?",
+    "answers": [
+      { "text": "Wink back", "advice": "Luna 2.0? Nah, maybe just chill with Solana." },
+      { "text": "Hide", "advice": "Put your crypto in cold storage, it's spooky out there." },
+      { "text": "Start moonwalking", "advice": "Buy more XRP, it's going places. Maybe." }
+    ]
+  },
+  {
+    "_id": "question_5",
+    "type": "question",
+    "question": "A rainbow falls on your sandwich. Thoughts?",
+    "answers": [
+      { "text": "Eat with pride", "advice": "Go multichain. Diversity is delicious." },
+      { "text": "Use it as a napkin", "advice": "Short altcoins. Clean up your wallet." },
+      { "text": "Save it in a jar", "advice": "Stake and chill. Let the colors compound." }
+    ]
+  },
+  {
+    "_id": "question_6",
+    "type": "question",
+    "question": "Your coffee mug grows legs. Action?",
+    "answers": [
+      { "text": "Chase it", "advice": "Invest in fast-moving assets. ZK rollups maybe?" },
+      { "text": "Let it go", "advice": "HODL harder. Good things come back." },
+      { "text": "Name it Greg", "advice": "Buy NFTs. Greg might be valuable someday." }
+    ]
+  },
+  {
+    "_id": "question_7",
+    "type": "question",
+    "question": "Bananas now whisper secrets. Listen or run?",
+    "answers": [
+      { "text": "Listen", "advice": "Ape into something new. Bananacoin when?" },
+      { "text": "Run", "advice": "Exit your positions. Danger smells like fruit." },
+      { "text": "Whisper back", "advice": "Trade with caution. You're being watched." }
+    ]
+  },
+  {
+    "_id": "question_8",
+    "type": "question",
+    "question": "You are made of noodles. Your plan?",
+    "answers": [
+      { "text": "Sauce yourself", "advice": "Slather your portfolio with some spicy altcoins." },
+      { "text": "Go gluten-free", "advice": "Liquidate. It's time for a cleanse." },
+      { "text": "Boil with joy", "advice": "Embrace volatility. Noodles like heat." }
+    ]
+  },
+  {
+    "_id": "question_9",
+    "type": "question",
+    "question": "The number 7 challenges you to a duel. What's your move?",
+    "answers": [
+      { "text": "Accept", "advice": "Leverage trade. May the odds ever be in your favor." },
+      { "text": "Negotiate", "advice": "Buy some stablecoins, reduce the drama." },
+      { "text": "Run in circles", "advice": "Reinvest in circular tokens. Round and round it goes." }
+    ]
+  },
+  {
+    "_id": "question_10",
+    "type": "question",
+    "question": "You sneeze and accidentally invent a new color. Cool?",
+    "answers": [
+      { "text": "Patent it", "advice": "Mint an NFT. You're a visionary now." },
+      { "text": "Ignore it", "advice": "Stick to the basics. BTC, ETH. No colors needed." },
+      { "text": "Name it Blorg", "advice": "Start a DAO. Blorg deserves it." }
+    ]
+  },
+  {
+    "_id": "question_11",
+    "type": "question",
+    "question": "Your shadow just bought a sports car. Reaction?",
+    "answers": [
+      { "text": "Ask for a ride", "advice": "Ride the pump. Just don't crash." },
+      { "text": "Report tax evasion", "advice": "Don't forget capital gains, shadow or not." },
+      { "text": "Challenge it to a race", "advice": "Day trade. Speed is everything." }
+    ]
+  },
+  {
+    "_id": "question_12",
+    "type": "question",
+    "question": "Spaghetti rains from the sky. Umbrella or fork?",
+    "answers": [
+      { "text": "Fork", "advice": "Time to fork that crypto. Make your own sauce." },
+      { "text": "Umbrella", "advice": "Protect your assets. Weatherproof your bags." },
+      { "text": "Dance in it", "advice": "Go all in. It’s raining gains!" }
+    ]
+  },
+  {
+    "_id": "question_13",
+    "type": "question",
+    "question": "Your left hand speaks fluent dolphin. Now what?",
+    "answers": [
+      { "text": "Hire it", "advice": "Invest in ocean-based tokens. Dive deep." },
+      { "text": "Learn dolphin too", "advice": "Join the pod. Group buys only." },
+      { "text": "Slap it", "advice": "Rage quit. Sell everything." }
+    ]
+  },
+  {
+    "_id": "question_14",
+    "type": "question",
+    "question": "You dream of cheese that can sing. What's your strategy?",
+    "answers": [
+      { "text": "Record an album", "advice": "NFT that dream. Cheddar tunes incoming." },
+      { "text": "Eat it", "advice": "Time to burn some tokens." },
+      { "text": "Let it perform", "advice": "Sit back and stake. Let it sing." }
+    ]
+  },
+  {
+    "_id": "question_15",
+    "type": "question",
+    "question": "All your socks have vanished. Immediate action?",
+    "answers": [
+      { "text": "Go barefoot", "advice": "Embrace the bear market." },
+      { "text": "Buy sandals", "advice": "Diversify into utility tokens." },
+      { "text": "Blame the cat", "advice": "Check your wallet history. Something fishy." }
+    ]
+  },
+  {
+    "_id": "question_16",
+    "type": "question",
+    "question": "You’ve been elected mayor of Mars. First decree?",
+    "answers": [
+      { "text": "Free pizza for Martians", "advice": "Invest in food-based crypto. You’ll be rich." },
+      { "text": "Launch Marscoin", "advice": "Obvious. You're a genius." },
+      { "text": "Tax Earth", "advice": "Set up a validator. Time to earn." }
+    ]
+  },
+  {
+    "_id": "question_17",
+    "type": "question",
+    "question": "An orange whispers ‘Ethereum’ in your ear. Response?",
+    "answers": [
+      { "text": "Buy ETH", "advice": "The fruit has spoken. Obey." },
+      { "text": "Squeeze it", "advice": "Take profits. Juice it out." },
+      { "text": "Make marmalade", "advice": "Layer 2 jam incoming. Get in early." }
+    ]
+  },
+  {
+    "_id": "question_18",
+    "type": "question",
+    "question": "Your eyebrows have become sentient. What now?",
+    "answers": [
+      { "text": "Teach them to trade", "advice": "Automate your trades. Let the brows win." },
+      { "text": "Hide", "advice": "Move to Monero. Stay anonymous." },
+      { "text": "Name them Moon & Dip", "advice": "Buy the dip. Trust Moon." }
+    ]
+  },
+  {
+    "_id": "question_19",
+    "type": "question",
+    "question": "You wake up inside a blockchain. First step?",
+    "answers": [
+      { "text": "Find the genesis block", "advice": "Go retro. Bitcoin never dies." },
+      { "text": "Fork reality", "advice": "Build your own chain. Be the dev." },
+      { "text": "Deploy smart pajamas", "advice": "Innovate. Comfort meets DeFi." }
+    ]
+  },
+  {
+    "_id": "question_20",
+    "type": "question",
+    "question": "Time is melting and smells like popcorn. What do?",
+    "answers": [
+      { "text": "Eat time", "advice": "Farm yield. Deliciously slow." },
+      { "text": "Butter it", "advice": "Enhance your bags. Flavored gains." },
+      { "text": "Sell clocks", "advice": "Exit your positions before it’s too late." }
+    ]
+  }
+]
